@@ -721,7 +721,7 @@ function PostCard({ item, onDelete, onEdit, onMove, onTogglePin, selected, onSel
       {!cleanCaption && !isLink && <p style={{ fontSize: 11, color: T.muted, lineHeight: 1.5, marginTop: 3, fontStyle: "italic", opacity: 0.5 }}>Untitled post</p>}
       {cleanCaption && <p style={{ fontSize: 11, color: T.text, lineHeight: 1.5, marginTop: 3, wordBreak: "break-word" }}>{cleanCaption}</p>}
       {displayTags.length > 0 && (<div style={{ display: "flex", gap: 3, flexWrap: "wrap", marginTop: 4 }}>{displayTags.map(t => <TagPill key={t} tag={t} onClick={onTagClick} small />)}</div>)}
-      {onSelectBoard && <button onClick={e => { e.stopPropagation(); onSelectBoard(item.categoryId); }} style={{ marginTop: 5, width: "100%", fontSize: 10, fontWeight: 700, color: "#c04060", background: "rgba(192,64,96,0.07)", border: "none", borderRadius: 6, padding: "4px 0", cursor: "pointer", fontFamily: "'Nunito',sans-serif" }}>{boardName ? `📂 ${boardName}` : "Go to board →"}</button>}
+      {onSelectBoard && <button onClick={e => { e.stopPropagation(); onSelectBoard(item.categoryId); }} style={{ marginTop: 5, width: "100%", fontSize: 10, fontWeight: 700, color: "#c04060", background: "rgba(192,64,96,0.07)", border: "none", borderRadius: 6, padding: "4px 0", cursor: "pointer", fontFamily: "'Nunito',sans-serif" }}>{boardName ? boardName : "Go to board →"}</button>}
       <div style={{ marginTop: 7, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 4 }}>
         <span style={{ fontSize: 10, color: T.muted, fontWeight: 600 }}>{item.date}</span>
         <div style={{ display: "flex", gap: 3, alignItems: "center" }}>
