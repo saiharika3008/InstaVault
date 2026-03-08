@@ -19,6 +19,61 @@ function useLocalStorage(key, initial) {
 function isUrl(s) { try { return Boolean(new URL(s)); } catch { return false; } }
 function isIgUrl(s) { try { return new URL(s).hostname.includes("instagram.com"); } catch { return false; } }
 function getIgUser(url) { try { const p = new URL(url).pathname.split("/").filter(Boolean); return p[0] ? `@${p[0]}` : null; } catch { return null; } }
+function getPlatform(url) {
+  try {
+    const h = new URL(url).hostname.replace("www.", "");
+    if (h.includes("instagram.com")) return "instagram";
+    if (h.includes("youtube.com") || h.includes("youtu.be")) return "youtube";
+    if (h.includes("pinterest.com") || h.includes("pin.it")) return "pinterest";
+    if (h.includes("twitter.com") || h.includes("x.com")) return "twitter";
+    if (h.includes("tiktok.com")) return "tiktok";
+    if (h.includes("facebook.com") || h.includes("fb.com")) return "facebook";
+    if (h.includes("reddit.com")) return "reddit";
+    if (h.includes("spotify.com")) return "spotify";
+    if (h.includes("amazon.com") || h.includes("amzn.to")) return "amazon";
+    return "link";
+  } catch { return "link"; }
+}
+function PlatformIcon({ url, size = 16, fill = "#c04060" }) {
+  const platform = getPlatform(url);
+  if (platform === "instagram") return <svg width={size} height={size} viewBox="0 0 24 24" fill={fill}><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" /></svg>;
+  if (platform === "youtube") return <svg width={size} height={size} viewBox="0 0 24 24" fill={fill}><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" /></svg>;
+  if (platform === "pinterest") return <svg width={size} height={size} viewBox="0 0 24 24" fill={fill}><path d="M12 0C5.373 0 0 5.372 0 12c0 5.084 3.163 9.426 7.627 11.174-.105-.949-.2-2.405.042-3.441.218-.937 1.407-5.965 1.407-5.965s-.359-.719-.359-1.782c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738a.36.36 0 01.083.345l-.333 1.36c-.053.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.632-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0z" /></svg>;
+  if (platform === "twitter") return <svg width={size} height={size} viewBox="0 0 24 24" fill={fill}><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.748l7.73-8.835L1.254 2.25H8.08l4.259 5.63zm-1.161 17.52h1.833L7.084 4.126H5.117z" /></svg>;
+  if (platform === "tiktok") return <svg width={size} height={size} viewBox="0 0 24 24" fill={fill}><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.18 8.18 0 004.79 1.52V6.75a4.85 4.85 0 01-1.02-.06z" /></svg>;
+  if (platform === "facebook") return <svg width={size} height={size} viewBox="0 0 24 24" fill={fill}><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" /></svg>;
+  if (platform === "reddit") return <svg width={size} height={size} viewBox="0 0 24 24" fill={fill}><path d="M12 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0zm5.01 4.744c.688 0 1.25.561 1.25 1.249a1.25 1.25 0 0 1-2.498.056l-2.597-.547-.8 3.747c1.824.07 3.48.632 4.674 1.488.308-.309.73-.491 1.207-.491.968 0 1.754.786 1.754 1.754 0 .716-.435 1.333-1.01 1.614a3.111 3.111 0 0 1 .042.52c0 2.694-3.13 4.87-7.004 4.87-3.874 0-7.004-2.176-7.004-4.87 0-.183.015-.366.043-.534A1.748 1.748 0 0 1 4.028 12c0-.968.786-1.754 1.754-1.754.463 0 .898.196 1.207.49 1.207-.883 2.878-1.43 4.744-1.487l.885-4.182a.342.342 0 0 1 .14-.197.35.35 0 0 1 .238-.042l2.906.617a1.214 1.214 0 0 1 1.108-.701zM9.25 12C8.561 12 8 12.562 8 13.25c0 .687.561 1.248 1.25 1.248.687 0 1.248-.561 1.248-1.249 0-.688-.561-1.249-1.249-1.249zm5.5 0c-.687 0-1.248.561-1.248 1.25 0 .687.561 1.248 1.249 1.248.688 0 1.249-.561 1.249-1.249 0-.687-.562-1.249-1.25-1.249zm-5.466 3.99a.327.327 0 0 0-.231.094.33.33 0 0 0 0 .463c.842.842 2.484.913 2.961.913.477 0 2.105-.056 2.961-.913a.361.361 0 0 0 .029-.463.33.33 0 0 0-.464 0c-.547.533-1.684.73-2.512.73-.828 0-1.979-.196-2.512-.73a.326.326 0 0 0-.232-.095z" /></svg>;
+  if (platform === "spotify") return <svg width={size} height={size} viewBox="0 0 24 24" fill={fill}><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z" /></svg>;
+  if (platform === "amazon") return <svg width={size} height={size} viewBox="0 0 24 24" fill={fill}><path d="M.045 18.02c.072-.116.187-.124.348-.022 3.636 2.11 7.594 3.166 11.87 3.166 2.852 0 5.668-.533 8.447-1.595l.315-.14c.138-.06.234-.1.293-.13.226-.088.39.02.475.227.086.22-.02.383-.114.452C18.356 21.554 14.836 22.5 11 22.5c-4.468 0-8.534-1.273-12.2-3.82-.17-.123-.22-.297-.13-.46zM6.765 14.29c.08-.12.196-.14.346-.06 2.15 1.246 4.37 1.87 6.657 1.87 1.63 0 3.2-.368 4.706-1.106a.55.55 0 01.228-.05c.12 0 .214.06.28.18.1.17.05.34-.1.46-1.63.99-3.35 1.486-5.155 1.486-2.47 0-4.775-.67-6.915-2.008-.12-.086-.17-.223-.047-.37zM12 0C5.373 0 0 5.373 0 12s5.373 12 12 12S24 18.627 24 12 18.627 0 12 0zm-.05 4.5c1.764 0 3.358.676 4.55 1.775l.24.23c.12.12.12.3 0 .42l-.65.65c-.12.12-.3.12-.42 0C14.82 6.733 13.48 6.2 12 6.2c-3.2 0-5.8 2.6-5.8 5.8 0 .6.09 1.17.26 1.71.04.15-.02.31-.16.38l-.85.42c-.17.08-.36.01-.44-.15A7.497 7.497 0 014.2 12C4.2 7.91 7.71 4.5 12 4.5h-.05zm5.8 3.7c.12-.12.3-.12.42 0l.65.65c.12.12.12.3 0 .42C17.98 10.12 17.5 11 17.5 12c0 .3.04.6.1.88.04.16-.04.33-.19.4l-.86.42c-.16.08-.35 0-.41-.16A5.79 5.79 0 0115.8 12c0-1.45.55-2.76 1.45-3.75l.55-.05z" /></svg>;
+  // generic link icon
+  return <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={fill} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6" /><polyline points="15 3 21 3 21 9" /><line x1="10" y1="14" x2="21" y2="3" /></svg>;
+}
+function getPlatformColor(url) {
+  const p = getPlatform(url);
+  if (p === "instagram") return "#c4511a";
+  if (p === "youtube") return "#FF0000";
+  if (p === "pinterest") return "#E60023";
+  if (p === "twitter") return "#000000";
+  if (p === "tiktok") return "#000000";
+  if (p === "facebook") return "#1877F2";
+  if (p === "reddit") return "#FF4500";
+  if (p === "spotify") return "#1DB954";
+  if (p === "amazon") return "#FF9900";
+  return "#888";
+}
+function getPlatformName(url) {
+  const p = getPlatform(url);
+  if (p === "instagram") return "Instagram";
+  if (p === "youtube") return "YouTube";
+  if (p === "pinterest") return "Pinterest";
+  if (p === "twitter") return "X / Twitter";
+  if (p === "tiktok") return "TikTok";
+  if (p === "facebook") return "Facebook";
+  if (p === "reddit") return "Reddit";
+  if (p === "spotify") return "Spotify";
+  if (p === "amazon") return "Amazon";
+  return null;
+}
 function getPalette(id) {
   const p = [{ bg: "rgba(255,210,218,0.35)", dot: "#f09ab8" }, { bg: "rgba(255,220,210,0.35)", dot: "#f0a878" }, { bg: "rgba(255,200,215,0.35)", dot: "#e87898" }, { bg: "rgba(255,215,220,0.35)", dot: "#f0b8c8" }, { bg: "rgba(255,205,212,0.35)", dot: "#e89098" }, { bg: "rgba(255,218,208,0.35)", dot: "#f0a890" }];
   let h = 0; for (let c of id) h = (h * 31 + c.charCodeAt(0)) & 0xffffffff; return p[Math.abs(h) % p.length];
@@ -71,7 +126,6 @@ function BoardAvatar({ icon, color, size = 22 }) {
   if (color) return <div style={{ width: size, height: size, borderRadius: "50%", background: color, flexShrink: 0 }} />;
   return <span style={{ fontSize: size * 0.82, lineHeight: 1, flexShrink: 0 }}>{icon || "🌸"}</span>;
 }
-function IgIcon({ size = 16, fill = "#c04060" }) { return (<svg width={size} height={size} viewBox="0 0 24 24" fill={fill}><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" /></svg>); }
 function TagPill({ tag, onClick, small }) {
   const bg = getTagColor(tag);
   return (<span onClick={onClick ? () => onClick(tag) : undefined} style={{ display: "inline-flex", alignItems: "center", padding: small ? "2px 7px" : "3px 9px", borderRadius: 99, background: bg + "33", color: bg, fontSize: small ? 10 : 11, fontWeight: 700, cursor: onClick ? "pointer" : "default", border: `1px solid ${bg}55`, userSelect: "none" }}>#{tag}</span>);
@@ -108,21 +162,19 @@ function PinBoxes({ value, onChange, error }) {
   const handleKey = (i, e) => { if (e.key === "Backspace" && !value[i] && i > 0) { refs[i - 1].current.focus(); const n = [...value]; n[i - 1] = ""; onChange(n); } };
   return (<div style={{ display: "flex", gap: 12, justifyContent: "center" }}>{value.map((d, i) => (<input key={i} ref={refs[i]} type="password" inputMode="numeric" maxLength={1} value={d} autoFocus={i === 0} onChange={e => handle(i, e.target.value)} onKeyDown={e => handleKey(i, e)} style={{ width: 52, height: 56, borderRadius: 14, border: `2px solid ${error ? "#f0826c" : d ? "#f0a878" : "#ede6dc"}`, background: d ? "#fff5ee" : "#fdf8f3", textAlign: "center", fontSize: 22, fontFamily: "'Nunito',sans-serif", fontWeight: 700, color: "#3a2e28", outline: "none" }} />))}</div>);
 }
-function ChangePinModal({ mode, boards, step, currentPin, newPin, error, onCurrentPin, onNewPin, onClose, onChangePinError }) {
+function ChangePinModal({ mode, currentVaultPin, onSavePin, onRemovePin, onClose }) {
   const [curBoxes, setCurBoxes] = useState(["", "", "", ""]);
   const [newBoxes, setNewBoxes] = useState(["", "", "", ""]);
   const [confBoxes, setConfBoxes] = useState(["", "", "", ""]);
-  const [localStep, setLocalStep] = useState('current');
+  const [localStep, setLocalStep] = useState(currentVaultPin ? 'current' : 'new');
   const [localError, setLocalError] = useState('');
   const [removeConfirm, setRemoveConfirm] = useState(false);
-
-  const correctPin = boards[0]?.pin || "";
 
   const handleCurrent = (val) => {
     setCurBoxes(val);
     if (val.every(d => d !== "")) {
       const entered = val.join("");
-      if (entered === correctPin) {
+      if (entered === currentVaultPin) {
         setLocalError('');
         if (mode === 'remove') { setRemoveConfirm(true); }
         else { setLocalStep('new'); }
@@ -138,11 +190,12 @@ function ChangePinModal({ mode, boards, step, currentPin, newPin, error, onCurre
     if (val.every(d => d !== "")) setLocalStep('confirm');
   };
 
-  const handleConfirm = (val, onSave) => {
+  const handleConfirm = (val) => {
     setConfBoxes(val);
     if (val.every(d => d !== "")) {
       if (val.join("") === newBoxes.join("")) {
-        onSave(newBoxes.join(""));
+        onSavePin(newBoxes.join(""));
+        onClose();
       } else {
         setLocalError("PINs don't match. Try again.");
         setTimeout(() => { setConfBoxes(["", "", "", ""]); setLocalError(''); }, 1200);
@@ -154,26 +207,26 @@ function ChangePinModal({ mode, boards, step, currentPin, newPin, error, onCurre
     <div style={{ fontSize: 32, marginBottom: 10 }}>{mode === 'remove' ? '🔓' : '🔑'}</div>
     {mode === 'change' && (<>
       {localStep === 'current' && (<>
-        <div style={{ fontFamily: "'Playfair Display',serif", fontSize: 18, color: "#3a2e28", marginBottom: 6 }}>Change PIN</div>
+        <div style={{ fontFamily: "'Playfair Display',serif", fontSize: 18, color: "#3a2e28", marginBottom: 6 }}>Change Vault PIN</div>
         <div style={{ fontSize: 13, color: "#b09070", marginBottom: 20 }}>Enter your current PIN</div>
         <PinBoxes value={curBoxes} onChange={handleCurrent} error={!!localError} />
         {localError && <div style={{ fontSize: 12, color: "#f0826c", marginTop: 10, fontWeight: 600 }}>{localError}</div>}
       </>)}
       {localStep === 'new' && (<>
-        <div style={{ fontFamily: "'Playfair Display',serif", fontSize: 18, color: "#3a2e28", marginBottom: 6 }}>New PIN</div>
-        <div style={{ fontSize: 13, color: "#b09070", marginBottom: 20 }}>Enter your new 4-digit PIN</div>
+        <div style={{ fontFamily: "'Playfair Display',serif", fontSize: 18, color: "#3a2e28", marginBottom: 6 }}>{currentVaultPin ? "New PIN" : "Set Vault PIN"}</div>
+        <div style={{ fontSize: 13, color: "#b09070", marginBottom: 20 }}>Enter a 4-digit PIN for all locked boards</div>
         <PinBoxes value={newBoxes} onChange={handleNew} error={false} />
       </>)}
       {localStep === 'confirm' && (<>
         <div style={{ fontFamily: "'Playfair Display',serif", fontSize: 18, color: "#3a2e28", marginBottom: 6 }}>Confirm PIN</div>
         <div style={{ fontSize: 13, color: "#b09070", marginBottom: 20 }}>Re-enter your new PIN to confirm</div>
-        <PinBoxes value={confBoxes} onChange={(val) => handleConfirm(val, (newP) => { boards.forEach(b => onChangePinError(b.id, newP)); onClose(); })} error={!!localError} />
+        <PinBoxes value={confBoxes} onChange={handleConfirm} error={!!localError} />
         {localError && <div style={{ fontSize: 12, color: "#f0826c", marginTop: 10, fontWeight: 600 }}>{localError}</div>}
       </>)}
     </>)}
     {mode === 'remove' && (<>
       {!removeConfirm && (<>
-        <div style={{ fontFamily: "'Playfair Display',serif", fontSize: 18, color: "#3a2e28", marginBottom: 6 }}>Remove PIN</div>
+        <div style={{ fontFamily: "'Playfair Display',serif", fontSize: 18, color: "#3a2e28", marginBottom: 6 }}>Remove Vault PIN</div>
         <div style={{ fontSize: 13, color: "#b09070", marginBottom: 20 }}>Enter your current PIN to continue</div>
         <PinBoxes value={curBoxes} onChange={handleCurrent} error={!!localError} />
         {localError && <div style={{ fontSize: 12, color: "#f0826c", marginTop: 10, fontWeight: 600 }}>{localError}</div>}
@@ -183,7 +236,7 @@ function ChangePinModal({ mode, boards, step, currentPin, newPin, error, onCurre
         <div style={{ fontSize: 13, color: "#b09070", marginBottom: 24, lineHeight: 1.6 }}>All locked boards will become regular boards. Are you sure?</div>
         <div style={{ display: "flex", gap: 9 }}>
           <button onClick={onClose} style={{ flex: 1, padding: "10px", borderRadius: 10, border: "1.5px solid #ede6dc", background: "transparent", color: "#b09070", fontFamily: "'Nunito',sans-serif", fontSize: 13, fontWeight: 700, cursor: "pointer" }}>No, keep PIN</button>
-          <button onClick={() => { boards.forEach(b => onChangePinError(b.id, null)); onClose(); }} style={{ flex: 1, padding: "10px", borderRadius: 10, border: "none", background: "#e63946", color: "white", fontFamily: "'Nunito',sans-serif", fontSize: 13, fontWeight: 700, cursor: "pointer" }}>Yes, remove</button>
+          <button onClick={() => { onRemovePin(); onClose(); }} style={{ flex: 1, padding: "10px", borderRadius: 10, border: "none", background: "#e63946", color: "white", fontFamily: "'Nunito',sans-serif", fontSize: 13, fontWeight: 700, cursor: "pointer" }}>Yes, remove</button>
         </div>
       </>)}
     </>)}
@@ -471,14 +524,12 @@ function IconPicker({ icon, color, onIconChange, onColorChange }) {
   </div>);
 }
 
-function BoardModal({ initial, onSave, onClose, existingNames }) {
+function BoardModal({ initial, onSave, onClose, existingNames, vaultPin }) {
   const editing = !!initial;
   const [name, setName] = useState(initial?.name || "");
   const [icon, setIcon] = useState(initial?.icon || "🌸");
   const [color, setColor] = useState(initial?.color || "");
   const [lockOn, setLockOn] = useState(!!initial?.pin);
-  const [pin, setPin] = useState(["", "", "", ""]);
-  const [changingPin, setChangingPin] = useState(false);
   const [nameErr, setNameErr] = useState("");
   const [coverImg, setCoverImg] = useState(initial?.coverImg || null);
   const coverRef = useRef();
@@ -487,8 +538,8 @@ function BoardModal({ initial, onSave, onClose, existingNames }) {
     e.preventDefault(); if (!name.trim()) { setNameErr("Board name is required."); return; }
     const dup = existingNames.filter(n => editing ? n.toLowerCase() !== initial.name.toLowerCase() : true).find(n => n.toLowerCase() === name.trim().toLowerCase());
     if (dup) { setNameErr("A board with this name already exists."); return; }
-    let newPin = initial?.pin || null;
-    if (lockOn) { if (!editing || changingPin) { if (pin.every(d => d !== "")) newPin = pin.join(""); } else newPin = initial?.pin || null; } else newPin = null;
+    // Use global vault PIN when locking
+    const newPin = lockOn ? (vaultPin || "0000") : null;
     onSave({ name: name.trim(), icon: color ? "" : icon, color: color || null, pin: newPin, coverImg: coverImg || null });
   };
   return (<div className="modal-bg" onClick={onClose}><div className="modal" style={{ width: 440, maxHeight: "90vh", overflowY: "auto" }} onClick={e => e.stopPropagation()}>
@@ -506,18 +557,13 @@ function BoardModal({ initial, onSave, onClose, existingNames }) {
         <input ref={coverRef} type="file" accept="image/*" style={{ display: "none" }} onChange={e => { if (e.target.files[0]) { const r = new FileReader(); r.onload = ev => setCoverImg(ev.target.result); r.readAsDataURL(e.target.files[0]); } }} />
       </div>
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "9px 0", marginBottom: 7 }}>
-        <div><div style={{ fontSize: 13, fontWeight: 700, color: "#3a2e28" }}>🔒 Lock this board</div><div style={{ fontSize: 11, color: "#b09070" }}>Protect with a 4-digit PIN</div></div>
-        <div onClick={() => setLockOn(p => !p)} style={{ width: 44, height: 24, borderRadius: 99, background: lockOn ? "#f0826c" : "#ede6dc", cursor: "pointer", position: "relative", transition: "background 0.2s", flexShrink: 0 }}><div style={{ position: "absolute", top: 3, left: lockOn ? 23 : 3, width: 18, height: 18, borderRadius: "50%", background: "white", transition: "left 0.2s" }} /></div>
+        <div>
+          <div style={{ fontSize: 13, fontWeight: 700, color: "#3a2e28" }}>🔒 Lock this board</div>
+          <div style={{ fontSize: 11, color: "#b09070" }}>{vaultPin ? "Uses your vault PIN" : "Set a vault PIN first in Locked Boards"}</div>
+        </div>
+        <div onClick={() => vaultPin ? setLockOn(p => !p) : null} style={{ width: 44, height: 24, borderRadius: 99, background: lockOn ? "#f0826c" : "#ede6dc", cursor: vaultPin ? "pointer" : "not-allowed", position: "relative", transition: "background 0.2s", flexShrink: 0, opacity: vaultPin ? 1 : 0.5 }}><div style={{ position: "absolute", top: 3, left: lockOn ? 23 : 3, width: 18, height: 18, borderRadius: "50%", background: "white", transition: "left 0.2s" }} /></div>
       </div>
-      {lockOn && (<div style={{ marginBottom: 13 }}>
-        {editing && initial?.pin && !changingPin
-          ? (<div style={{ display: "flex", gap: 8 }}>
-            <button type="button" onClick={() => setChangingPin(true)} style={{ flex: 1, padding: "5px 13px", borderRadius: 8, border: "1px solid #ede6dc", background: "#fdf8f3", color: "#b07850", fontSize: 12, fontWeight: 700, cursor: "pointer", fontFamily: "'Nunito',sans-serif" }}>Change PIN</button>
-            <button type="button" onClick={() => { setLockOn(false); setChangingPin(false); }} style={{ flex: 1, padding: "5px 13px", borderRadius: 8, border: "1px solid rgba(230,57,70,0.25)", background: "transparent", color: "#e63946", fontSize: 12, fontWeight: 700, cursor: "pointer", fontFamily: "'Nunito',sans-serif" }}>Remove PIN</button>
-          </div>)
-          : (<><div style={{ fontSize: 12, color: "#b09070", marginBottom: 9, textAlign: "center" }}>{editing && changingPin ? "New PIN" : "Set 4-digit PIN"}</div><PinBoxes value={pin} onChange={setPin} error={false} />{editing && changingPin && <button type="button" onClick={() => setChangingPin(false)} style={{ marginTop: 6, fontSize: 11, color: "#b09070", background: "none", border: "none", cursor: "pointer", fontFamily: "'Nunito',sans-serif", display: "block", width: "100%", textAlign: "center" }}>← Keep existing PIN</button>}</>)
-        }
-      </div>)}
+      {!vaultPin && <div style={{ fontSize: 11, color: "#f0826c", marginBottom: 10, fontWeight: 600 }}>⚠️ No vault PIN set. Go to Locked Boards → Change PIN to set one first.</div>}
       <div className="modal-btns"><button type="button" className="btn-cancel" onClick={onClose}>Cancel</button><button type="submit" className="btn-create">{editing ? "Save Changes" : "Create Board ✨"}</button></div>
     </form>
   </div></div>);
@@ -619,7 +665,7 @@ function AddPostForm({ onAdd, dark }) {
   const handlePaste = (e) => { const its = e.clipboardData?.items; if (!its) return; for (let it of its) { if (it.type.startsWith("image/")) { e.preventDefault(); readFile(it.getAsFile()); return; } } };
   return (<form style={{ background: T.surface, borderRadius: 12, border: `1.5px solid ${T.border}`, overflow: "hidden", marginBottom: 14 }} onSubmit={handleSubmit} onPaste={handlePaste}>
     <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "9px 12px" }}>
-      <span style={{ fontSize: 14, flexShrink: 0, width: 15, display: "flex", alignItems: "center" }}>{isIgUrl(link) ? <IgIcon size={14} /> : "🔗"}</span>
+      <span style={{ fontSize: 14, flexShrink: 0, width: 15, display: "flex", alignItems: "center" }}>{isUrl(link) ? <PlatformIcon url={link} size={14} fill={getPlatformColor(link)} /> : "🔗"}</span>
       <input style={{ flex: 1, border: "none", background: "transparent", outline: "none", fontFamily: "'Nunito',sans-serif", fontSize: 12.5, color: T.text }} placeholder="Paste an Instagram link…" value={link} onChange={e => { setLink(e.target.value); if (e.target.value) setExpanded(true); else setExpanded(false); }} />
       {link && <button type="button" onClick={() => setExpanded(p => !p)} style={{ padding: "3px 7px", borderRadius: 6, border: `1px solid ${T.border}`, background: T.input, color: T.muted, fontSize: 10.5, fontWeight: 700, cursor: "pointer", fontFamily: "'Nunito',sans-serif", flexShrink: 0 }}>📎{expanded ? "▲" : "▼"}</button>}
       <button type="submit" disabled={!link.trim()} style={{ padding: "6px 14px", borderRadius: 99, border: "none", background: link.trim() ? "linear-gradient(135deg,#f9c784,#f0826c)" : "#e8d8cc", color: link.trim() ? "#fff" : "#b8a898", fontFamily: "'Nunito',sans-serif", fontSize: 12, fontWeight: 700, cursor: link.trim() ? "pointer" : "not-allowed", flexShrink: 0 }}>Save</button>
@@ -651,6 +697,8 @@ function PostCard({ item, onDelete, onEdit, onMove, onTogglePin, selected, onSel
   const hasThumb = item.imgUrl && (isUrl(item.imgUrl) || item.imgUrl.startsWith("data:"));
   const isIG = isIgUrl(item.link); const isLink = isUrl(item.link);
   const igUser = isIG ? getIgUser(item.link) : null;
+  const platformName = isLink ? getPlatformName(item.link) : null;
+  const platformColor = isLink ? getPlatformColor(item.link) : "#888";
   const [copied, setCopied] = useState(false);
   const copyLink = () => { navigator.clipboard?.writeText(item.link).then(() => { setCopied(true); setTimeout(() => setCopied(false), 1500); }); };
   const displayTags = item.tags || parseTags(item.caption || "");
@@ -661,14 +709,14 @@ function PostCard({ item, onDelete, onEdit, onMove, onTogglePin, selected, onSel
     {hasThumb && (<div style={{ position: "relative", overflow: "hidden", background: "#f5ece4", maxHeight: 175, borderRadius: "10px 10px 0 0", cursor: bulkMode ? "pointer" : (isLink ? "pointer" : "default") }} onClick={e => { if (bulkMode) { e.stopPropagation(); onSelect && onSelect(item.id); return; } isLink && window.open(item.link, "_blank", "noopener"); }}>
       <img src={item.imgUrl} alt="" style={{ width: "100%", display: "block", objectFit: "cover" }} onError={e => e.target.parentElement.style.display = "none"} />
       {isLink && <div style={{ position: "absolute", top: 7, right: 7, background: "rgba(0,0,0,0.55)", borderRadius: 99, padding: "3px 8px", display: "flex", alignItems: "center", gap: 4, backdropFilter: "blur(4px)" }}>
-        {isIG ? <IgIcon size={11} fill="white" /> : <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6" /><polyline points="15 3 21 3 21 9" /><line x1="10" y1="14" x2="21" y2="3" /></svg>}
-        <span style={{ fontSize: 9.5, color: "white", fontWeight: 700 }}>{isIG ? (igUser || "Open") : "Open"}</span>
+        <PlatformIcon url={item.link} size={11} fill="white" />
+        <span style={{ fontSize: 9.5, color: "white", fontWeight: 700 }}>{isIG ? (igUser || "Open") : (platformName || "Open")}</span>
       </div>}
     </div>)}
     <div style={{ padding: "8px 9px 7px", borderRadius: hasThumb ? "0 0 10px 10px" : "10px" }}>
       {!hasThumb && <div style={{ width: 5, height: 5, borderRadius: 99, background: pal.dot, marginBottom: 5 }} />}
-      {isLink ? (<a href={bulkMode ? "#" : item.link} target={bulkMode ? "_self" : "_blank"} rel="noopener noreferrer" onClick={e => { if (bulkMode) { e.preventDefault(); onSelect && onSelect(item.id); } }} style={{ color: "#b05020", fontSize: 11, fontWeight: 600, textDecoration: "none", display: "block", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-        {isIG && igUser ? <span style={{ display: "flex", alignItems: "center", gap: 4 }}><IgIcon size={10} fill="#c4511a" />{igUser}</span> : `🔗 ${item.link.replace("https://", "").substring(0, 32)}`}
+      {isLink ? (<a href={bulkMode ? "#" : item.link} target={bulkMode ? "_self" : "_blank"} rel="noopener noreferrer" onClick={e => { if (bulkMode) { e.preventDefault(); onSelect && onSelect(item.id); } }} style={{ color: platformColor, fontSize: 11, fontWeight: 600, textDecoration: "none", display: "block", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+        {isIG && igUser ? <span style={{ display: "flex", alignItems: "center", gap: 4 }}><PlatformIcon url={item.link} size={10} fill={platformColor} />{igUser}</span> : platformName ? <span style={{ display: "flex", alignItems: "center", gap: 4 }}><PlatformIcon url={item.link} size={10} fill={platformColor} />{platformName}</span> : `🔗 ${item.link.replace("https://", "").substring(0, 32)}`}
       </a>) : (<p style={{ fontSize: 11.5, color: T.text, lineHeight: 1.55, wordBreak: "break-word" }}>{item.link}</p>)}
       {!cleanCaption && !isLink && <p style={{ fontSize: 11, color: T.muted, lineHeight: 1.5, marginTop: 3, fontStyle: "italic", opacity: 0.5 }}>Untitled post</p>}
       {cleanCaption && <p style={{ fontSize: 11, color: T.text, lineHeight: 1.5, marginTop: 3, wordBreak: "break-word" }}>{cleanCaption}</p>}
@@ -821,7 +869,7 @@ function DashboardPage({ categories, items, onSelectBoard, onNewBoard, dark, sea
           {recentItems.map((item, idx) => {
             const hasThumb = item.imgUrl && (isUrl(item.imgUrl) || item.imgUrl.startsWith("data:"));
             const board = categories.find(c => c.id === item.categoryId);
-            const isIG = isIgUrl(item.link); const igUser = isIG ? getIgUser(item.link) : null;
+            const pName = getPlatformName(item.link);
             const [c1, c2] = CARD_ACCENTS[idx % CARD_ACCENTS.length];
             return (<div key={item.id} style={{ borderRadius: 9, overflow: "hidden", border: `1px solid ${T.border}`, background: T.surface, backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)", animation: "fadeUp 0.3s ease both", animationDelay: `${idx * 0.03}s`, boxShadow: "0 2px 8px rgba(200,80,100,0.05)", position: "relative" }}>
               <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 2, background: `linear-gradient(90deg,${c1},${c2})`, zIndex: 2 }} />
@@ -829,7 +877,7 @@ function DashboardPage({ categories, items, onSelectBoard, onNewBoard, dark, sea
                 {hasThumb ? <img src={item.imgUrl} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : <span style={{ fontSize: 18 }}>{board?.icon || "🌸"}</span>}
               </div>
               <div style={{ padding: "5px 7px 6px" }}>
-                <div style={{ fontSize: 8.5, color: T.text, fontWeight: 600, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{item.caption || (isIG && igUser ? igUser : item.link.replace("https://", "").substring(0, 16))}</div>
+                <div style={{ fontSize: 8.5, color: T.text, fontWeight: 600, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{item.caption || (pName || item.link.replace("https://", "").substring(0, 16))}</div>
                 {board && <div style={{ fontSize: 7.5, color: accentColor, fontWeight: 700, marginTop: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", opacity: 0.8 }}>{board.name}</div>}
               </div>
             </div>);
@@ -981,6 +1029,7 @@ export default function App() {
   const [profile, setProfile] = useLocalStorage("iv_profile", { name: "", email: "", avatarType: "letter" });
   const [journal, setJournal] = useLocalStorage("iv_journal", {});
   const [showOnboarding, setShowOnboarding] = useLocalStorage("iv_onboarded", true);
+  const [vaultPin, setVaultPin] = useLocalStorage("iv_vault_pin", null);
   const [view, setView] = useState("dashboard");
   const [unlockedIds, setUnlockedIds] = useState([]);
   const [vaultUnlocked, setVaultUnlocked] = useState(false);
@@ -1082,19 +1131,22 @@ export default function App() {
 
   const handleSelectBoard = (cat, from) => { if (cat.pin && !unlockedIds.includes(cat.id)) { setPinModal({ boardId: cat.id }); setPinError(""); return; } setActiveTag(null); setActiveTagView(null); setPrevView(from || view); setView(cat.id); };
   const handlePinSubmit = (entered) => {
-    const cat = categories.find(c => c.id === pinModal.boardId);
-    if (!cat) { setPinError("Board not found."); return; }
-    if (entered === cat.pin) {
-      if (pinModal.vaultMode) {
+    if (pinModal.vaultMode) {
+      // Global vault PIN to unlock the locked boards section
+      if (entered === vaultPin) {
         setVaultUnlocked(true);
         setUnlockedIds(p => [...new Set([...p, ...lockedBoards.map(c => c.id)])]);
         setView("locked");
-      } else {
-        setUnlockedIds(p => [...p, cat.id]);
-        setView(cat.id);
-      }
-      setPinModal(null); setPinError("");
-    } else setPinError("Wrong PIN. Try again.");
+        setPinModal(null); setPinError("");
+      } else setPinError("Wrong PIN. Try again.");
+    } else {
+      // Opening a specific locked board — also uses global vault PIN
+      if (entered === vaultPin) {
+        setUnlockedIds(p => [...p, pinModal.boardId]);
+        setView(pinModal.boardId);
+        setPinModal(null); setPinError("");
+      } else setPinError("Wrong PIN. Try again.");
+    }
   };
 
   const addItem = ({ link, imgUrl, caption, tags }) => { const allTags = [...new Set([...(tags || []), ...parseTags(caption || "")])]; setItems(p => [...p, { id: Date.now().toString(), link, imgUrl, caption: caption || "", tags: allTags, categoryId: view, date: new Date().toLocaleDateString("en-US", { month: "short", day: "numeric" }), pinned: false, order: p.filter(i => i.categoryId === view).length }]); };
@@ -1306,9 +1358,11 @@ export default function App() {
                   setVaultUnlocked(false);
                   const inLockedBoard = lockedBoards.some(c => c.id === view);
                   if (view === "locked" || inLockedBoard) setView("dashboard");
+                } else if (!vaultPin) {
+                  // No vault PIN set yet — go straight to locked page to set one
+                  setView("locked");
                 } else {
-                  const first = lockedBoards[0];
-                  if (first) { setPinModal({ boardId: first.id, vaultMode: true }); setPinError(""); }
+                  setPinModal({ vaultMode: true }); setPinError("");
                 }
               }}
             >
@@ -1355,17 +1409,17 @@ export default function App() {
             <NavIcon type="search" color={T.muted} size={16} />
             <input ref={searchRef} value={searchQuery} onChange={e => setSearchQuery(e.target.value)}
               placeholder={
-                view === "dashboard" ? "Search boards & posts… (press /)" :
-                  view === "home" ? "Search saved posts… (press /)" :
-                    view === "saved" ? "Search saved posts… (press /)" :
-                      view === "tags" ? "Search tags… (press /)" :
-                        view === "journal" ? "Search boards… (press /)" :
-                          view === "myboards" ? "Search boards… (press /)" :
-                            view === "locked" ? "Search boards… (press /)" :
-                              "Search in this board… (press /)"
+                view === "dashboard" ? "Search boards & posts…" :
+                  view === "home" ? "Search saved posts…" :
+                    view === "saved" ? "Search saved posts…" :
+                      view === "tags" ? "Search tags…" :
+                        view === "journal" ? "Search boards…" :
+                          view === "myboards" ? "Search boards…" :
+                            view === "locked" ? "Search boards…" :
+                              "Search in this board…"
               } />
             {searchQuery && <button onClick={() => setSearchQuery("")} style={{ background: "none", border: "none", cursor: "pointer", fontSize: 14, color: T.muted, lineHeight: 1, padding: 0, flexShrink: 0 }}>×</button>}
-            {!searchQuery && <span style={{ fontSize: 10, fontWeight: 700, color: T.muted, background: dark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.06)", border: `1px solid ${T.border}`, borderRadius: 5, padding: "2px 6px", flexShrink: 0, opacity: .7 }}>/</span>}
+
           </div>
           {/* Profile avatar — top right */}
           <button onClick={() => setShowProfile(true)} style={{ background: "none", border: "none", cursor: "pointer", padding: 0, flexShrink: 0 }}><ProfileAvatar size={32} /></button>
@@ -1391,8 +1445,8 @@ export default function App() {
               <div style={{ fontFamily: "'Playfair Display',serif", fontSize: 24, fontWeight: 600, color: T.text }}>Locked Boards</div>
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#c04060" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" /><path d="M7 11V7a5 5 0 0110 0v4" /></svg>
               <div style={{ marginLeft: "auto", display: "flex", gap: 6, alignItems: "center" }}>
-                <button onClick={() => { setChangePinModal({ mode: 'change', boards: lockedBoards }); setChangePinStep('current'); setChangePinCurrent(''); setChangePinNew(''); setChangePinError(''); }} style={{ fontSize: 11, fontWeight: 700, color: "#c04060", background: "rgba(192,64,96,0.08)", border: "1.5px solid rgba(192,64,96,0.2)", borderRadius: 8, padding: "4px 12px", cursor: "pointer", fontFamily: "'Nunito',sans-serif" }}>🔑 Change PIN</button>
-                <button onClick={() => { setChangePinModal({ mode: 'remove', boards: lockedBoards }); setChangePinStep('current'); setChangePinCurrent(''); setChangePinError(''); }} style={{ fontSize: 11, fontWeight: 700, color: "#e63946", background: "rgba(230,57,70,0.06)", border: "1.5px solid rgba(230,57,70,0.2)", borderRadius: 8, padding: "4px 12px", cursor: "pointer", fontFamily: "'Nunito',sans-serif" }}>🗑 Remove PIN</button>
+                <button onClick={() => { setChangePinModal({ mode: 'change' }); }} style={{ fontSize: 11, fontWeight: 700, color: "#c04060", background: "rgba(192,64,96,0.08)", border: "1.5px solid rgba(192,64,96,0.2)", borderRadius: 8, padding: "4px 12px", cursor: "pointer", fontFamily: "'Nunito',sans-serif" }}>🔑 {vaultPin ? "Change PIN" : "Set PIN"}</button>
+                {vaultPin && <button onClick={() => { setChangePinModal({ mode: 'remove' }); }} style={{ fontSize: 11, fontWeight: 700, color: "#e63946", background: "rgba(230,57,70,0.06)", border: "1.5px solid rgba(230,57,70,0.2)", borderRadius: 8, padding: "4px 12px", cursor: "pointer", fontFamily: "'Nunito',sans-serif" }}>🗑 Remove PIN</button>}
                 <button onClick={() => { setBoardSelectMode(p => !p); setSelectedBoards([]); }} style={{ fontSize: 11, fontWeight: 700, color: boardSelectMode ? "#c04060" : T.muted, background: boardSelectMode ? "rgba(192,64,96,0.08)" : "transparent", border: `1.5px solid ${boardSelectMode ? "#c04060" : T.border}`, borderRadius: 8, padding: "4px 12px", cursor: "pointer", fontFamily: "'Nunito',sans-serif" }}>{boardSelectMode ? "✓ Selecting" : "Select"}</button>
 
               </div>
@@ -1783,12 +1837,12 @@ export default function App() {
       </main>
     </div>}
 
-    {hasEntered && showAddCat && <BoardModal onSave={addCategory} onClose={() => setShowAddCat(false)} existingNames={categories.map(c => c.name)} />}
-    {hasEntered && editBoardData && <BoardModal initial={editBoardData} onSave={saveEditBoard} onClose={() => setEditBoardData(null)} existingNames={categories.map(c => c.name)} />}
+    {hasEntered && showAddCat && <BoardModal onSave={addCategory} onClose={() => setShowAddCat(false)} existingNames={categories.map(c => c.name)} vaultPin={vaultPin} />}
+    {hasEntered && editBoardData && <BoardModal initial={editBoardData} onSave={saveEditBoard} onClose={() => setEditBoardData(null)} existingNames={categories.map(c => c.name)} vaultPin={vaultPin} />}
     {hasEntered && showProfile && <ProfileModal onClose={() => setShowProfile(false)} dark={dark} onToggleDark={() => setDark(p => !p)} profile={profile} onSaveProfile={p => { setProfile(p); }} categories={categories} items={items} journal={journal} deletedItems={deletedItems} deletedBoards={deletedBoards} onSignOut={() => { setShowProfile(false); setHasEntered(false); setSplashDone(false); setAppVisible(false); }} />}
     {hasEntered && showJournal && selected && <JournalModal board={selected} journal={journal} onSave={saveJournal} onClose={() => setShowJournal(false)} dark={dark} />}
     {hasEntered && journalPreview && (() => { const previewBoard = categories.find(c => c.id === journalPreview); return previewBoard ? <JournalModal board={previewBoard} journal={journal} onSave={saveJournal} onClose={() => setJournalPreview(null)} dark={dark} /> : null; })()}
-    {hasEntered && changePinModal && <ChangePinModal mode={changePinModal.mode} boards={changePinModal.boards} onChangePinError={(boardId, newPin) => { setCategories(p => p.map(c => c.id === boardId ? { ...c, pin: newPin } : c)); }} onClose={() => setChangePinModal(null)} />}
+    {hasEntered && changePinModal && <ChangePinModal mode={changePinModal.mode} currentVaultPin={vaultPin} onSavePin={(newPin) => { setVaultPin(newPin); setCategories(p => p.map(c => c.pin ? { ...c, pin: newPin } : c)); }} onRemovePin={() => { setVaultPin(null); setCategories(p => p.map(c => ({ ...c, pin: null }))); setVaultUnlocked(false); }} onClose={() => setChangePinModal(null)} />}
     {hasEntered && pinModal && <PinModal title="Enter PIN" subtitle="This board is protected." onSubmit={handlePinSubmit} onClose={() => { setPinModal(null); setPinError(""); }} error={pinError} />}
     {hasEntered && confirmModal && <ConfirmModal title={confirmModal.title} subtitle={confirmModal.subtitle} onConfirm={confirmModal.onConfirm} onClose={() => setConfirmModal(null)} />}
     {hasEntered && editPost && <EditPostModal item={editPost} onSave={saveEditPost} onClose={() => setEditPost(null)} dark={dark} />}
