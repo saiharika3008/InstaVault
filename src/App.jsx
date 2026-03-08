@@ -691,7 +691,7 @@ function AddPostForm({ onAdd, dark }) {
   </form>);
 }
 
-function PostCard({ item, onDelete, onEdit, onMove, onTogglePin, selected, onSelect, bulkMode, animDelay, dark, onTagClick, onSelectBoard }) {
+function PostCard({ item, onDelete, onEdit, onMove, onTogglePin, selected, onSelect, bulkMode, animDelay, dark, onTagClick, onSelectBoard, boardName }) {
   const T = dark ? DARK : LIGHT;
   const pal = getPalette(item.id);
   const hasThumb = item.imgUrl && (isUrl(item.imgUrl) || item.imgUrl.startsWith("data:"));
@@ -710,18 +710,18 @@ function PostCard({ item, onDelete, onEdit, onMove, onTogglePin, selected, onSel
       <img src={item.imgUrl} alt="" style={{ width: "100%", display: "block", objectFit: "cover" }} onError={e => e.target.parentElement.style.display = "none"} />
       {isLink && <div style={{ position: "absolute", top: 7, right: 7, background: "rgba(0,0,0,0.55)", borderRadius: 99, padding: "3px 8px", display: "flex", alignItems: "center", gap: 4, backdropFilter: "blur(4px)" }}>
         <PlatformIcon url={item.link} size={11} fill="white" />
-        <span style={{ fontSize: 9.5, color: "white", fontWeight: 700 }}>{isIG ? (igUser || "Open") : (platformName || "Open")}</span>
+        <span style={{ fontSize: 9.5, color: "white", fontWeight: 700 }}>{platformName || "Open"}</span>
       </div>}
     </div>)}
     <div style={{ padding: "8px 9px 7px", borderRadius: hasThumb ? "0 0 10px 10px" : "10px" }}>
       {!hasThumb && <div style={{ width: 5, height: 5, borderRadius: 99, background: pal.dot, marginBottom: 5 }} />}
       {isLink ? (<a href={bulkMode ? "#" : item.link} target={bulkMode ? "_self" : "_blank"} rel="noopener noreferrer" onClick={e => { if (bulkMode) { e.preventDefault(); onSelect && onSelect(item.id); } }} style={{ color: platformColor, fontSize: 11, fontWeight: 600, textDecoration: "none", display: "block", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-        {isIG && igUser ? <span style={{ display: "flex", alignItems: "center", gap: 4 }}><PlatformIcon url={item.link} size={10} fill={platformColor} />{igUser}</span> : platformName ? <span style={{ display: "flex", alignItems: "center", gap: 4 }}><PlatformIcon url={item.link} size={10} fill={platformColor} />{platformName}</span> : `🔗 ${item.link.replace("https://", "").substring(0, 32)}`}
+        {platformName ? <span style={{ display: "flex", alignItems: "center", gap: 4 }}><PlatformIcon url={item.link} size={10} fill={platformColor} />{platformName}</span> : `🔗 ${item.link.replace("https://", "").substring(0, 32)}`}
       </a>) : (<p style={{ fontSize: 11.5, color: T.text, lineHeight: 1.55, wordBreak: "break-word" }}>{item.link}</p>)}
       {!cleanCaption && !isLink && <p style={{ fontSize: 11, color: T.muted, lineHeight: 1.5, marginTop: 3, fontStyle: "italic", opacity: 0.5 }}>Untitled post</p>}
       {cleanCaption && <p style={{ fontSize: 11, color: T.text, lineHeight: 1.5, marginTop: 3, wordBreak: "break-word" }}>{cleanCaption}</p>}
       {displayTags.length > 0 && (<div style={{ display: "flex", gap: 3, flexWrap: "wrap", marginTop: 4 }}>{displayTags.map(t => <TagPill key={t} tag={t} onClick={onTagClick} small />)}</div>)}
-      {onSelectBoard && <button onClick={e => { e.stopPropagation(); onSelectBoard(item.categoryId); }} style={{ marginTop: 5, width: "100%", fontSize: 10, fontWeight: 700, color: "#c04060", background: "rgba(192,64,96,0.07)", border: "none", borderRadius: 6, padding: "4px 0", cursor: "pointer", fontFamily: "'Nunito',sans-serif" }}>Go to board →</button>}
+      {onSelectBoard && <button onClick={e => { e.stopPropagation(); onSelectBoard(item.categoryId); }} style={{ marginTop: 5, width: "100%", fontSize: 10, fontWeight: 700, color: "#c04060", background: "rgba(192,64,96,0.07)", border: "none", borderRadius: 6, padding: "4px 0", cursor: "pointer", fontFamily: "'Nunito',sans-serif" }}>{boardName ? `📂 ${boardName}` : "Go to board →"}</button>}
       <div style={{ marginTop: 7, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 4 }}>
         <span style={{ fontSize: 10, color: T.muted, fontWeight: 600 }}>{item.date}</span>
         <div style={{ display: "flex", gap: 3, alignItems: "center" }}>
@@ -974,7 +974,7 @@ function Homepage({ categories, items, onSelectBoard, onNewBoard, dark, searchQu
             <div key={ci} style={{ flex: 1, display: "flex", flexDirection: "column", gap: 13, overflow: "visible" }}>
               {col.map((item, ii) => {
                 const goToBoard = (catId) => { const c = categories.find(x => x.id === catId); if (c) onSelectBoard(c); };
-                return (<PostCard key={item.id} item={item} onDelete={onDeleteItem} onEdit={onEditItem} onMove={onMoveItem} onTogglePin={onTogglePinItem} animDelay={ii * 0.04} dark={dark} onTagClick={onTagClick} onSelectBoard={goToBoard} bulkMode={bulkMode} selected={selectedPosts.includes(item.id)} onSelect={onSelectPost} />);
+                return (<PostCard key={item.id} item={item} onDelete={onDeleteItem} onEdit={onEditItem} onMove={onMoveItem} onTogglePin={onTogglePinItem} animDelay={ii * 0.04} dark={dark} onTagClick={onTagClick} onSelectBoard={goToBoard} boardName={categories.find(c => c.id === item.categoryId)?.name} bulkMode={bulkMode} selected={selectedPosts.includes(item.id)} onSelect={onSelectPost} />);
               })}
             </div>
           ))}
@@ -1563,7 +1563,7 @@ export default function App() {
                             <div key={ci} style={{ flex: 1, display: "flex", flexDirection: "column", gap: 13, overflow: "visible" }}>
                               {col.map((item, ii) => {
                                 const goToBoard = (catId) => { const c = categories.find(x => x.id === catId); if (c) handleSelectBoard(c); };
-                                return (<PostCard key={item.id} item={item} onDelete={requestDeleteItem} onEdit={setEditPost} onMove={i => setMovePost(i)} onTogglePin={togglePin} animDelay={ii * 0.04} dark={dark} onTagClick={t => { setView("tags"); setActiveTagView(t); }} onSelectBoard={goToBoard} bulkMode={bulkMode} selected={selectedPosts.includes(item.id)} onSelect={id => setSelectedPosts(p => p.includes(id) ? p.filter(x => x !== id) : [...p, id])} />);
+                                return (<PostCard key={item.id} item={item} onDelete={requestDeleteItem} onEdit={setEditPost} onMove={i => setMovePost(i)} onTogglePin={togglePin} animDelay={ii * 0.04} dark={dark} onTagClick={t => { setView("tags"); setActiveTagView(t); }} onSelectBoard={goToBoard} boardName={categories.find(c => c.id === item.categoryId)?.name} bulkMode={bulkMode} selected={selectedPosts.includes(item.id)} onSelect={id => setSelectedPosts(p => p.includes(id) ? p.filter(x => x !== id) : [...p, id])} />);
                               })}
                             </div>
                           ))}
@@ -1597,7 +1597,7 @@ export default function App() {
                               <div key={ci} style={{ flex: 1, display: "flex", flexDirection: "column", gap: 13, overflow: "visible" }}>
                                 {col.map((item, ii) => {
                                   const goToBoard = (catId) => { const c = categories.find(x => x.id === catId); if (c) handleSelectBoard(c); };
-                                  return (<PostCard key={item.id} item={item} onDelete={requestDeleteItem} onEdit={setEditPost} onMove={i => setMovePost(i)} onTogglePin={togglePin} animDelay={ii * 0.04} dark={dark} onTagClick={t => { setActiveTagView(t); }} onSelectBoard={goToBoard} bulkMode={bulkMode} selected={selectedPosts.includes(item.id)} onSelect={id => setSelectedPosts(p => p.includes(id) ? p.filter(x => x !== id) : [...p, id])} />);
+                                  return (<PostCard key={item.id} item={item} onDelete={requestDeleteItem} onEdit={setEditPost} onMove={i => setMovePost(i)} onTogglePin={togglePin} animDelay={ii * 0.04} dark={dark} onTagClick={t => { setActiveTagView(t); }} onSelectBoard={goToBoard} boardName={categories.find(c => c.id === item.categoryId)?.name} bulkMode={bulkMode} selected={selectedPosts.includes(item.id)} onSelect={id => setSelectedPosts(p => p.includes(id) ? p.filter(x => x !== id) : [...p, id])} />);
                                 })}
                               </div>
                             ))}
