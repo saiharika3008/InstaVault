@@ -372,8 +372,8 @@ function SplashScreen({ onDone }) {
 function ProfileModal({ onClose, dark, onToggleDark, profile, onSaveProfile, onSignOut, categories, items, journal, deletedItems, deletedBoards }) {
   const T = dark ? DARK : LIGHT;
   const [page, setPage] = useState("main");
-  const [name, setName] = useState(profile.name || "Harika");
-  const [email, setEmail] = useState(profile.email || "harika@example.com");
+  const [name, setName] = useState(profile.name || "");
+  const [email, setEmail] = useState(profile.email || "");
   const [avatarType, setAvatarType] = useState(profile.avatarType || "letter");
   const [avatarEmoji, setAvatarEmoji] = useState(profile.avatarEmoji || "🌸");
   const [avatarImg, setAvatarImg] = useState(profile.avatarImg || null);
@@ -382,7 +382,7 @@ function ProfileModal({ onClose, dark, onToggleDark, profile, onSaveProfile, onS
   const AvatarPreview = ({ size = 68, n = name, type = avatarType, emoji = avatarEmoji, img = avatarImg }) => {
     if (type === "image" && img) return <img src={img} alt="" style={{ width: size, height: size, borderRadius: "50%", objectFit: "cover", boxShadow: "0 4px 16px rgba(240,130,108,0.28)" }} />;
     if (type === "emoji") return <div style={{ width: size, height: size, borderRadius: "50%", background: "linear-gradient(135deg,#fef2f5,#fde4ea)", border: "1.5px solid rgba(220,140,160,0.2)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: size * 0.44 }}>{emoji}</div>;
-    return <div style={{ width: size, height: size, borderRadius: "50%", background: "linear-gradient(135deg,#f9c784,#f0826c)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: size * 0.38, fontWeight: 700, color: "white", boxShadow: "0 4px 16px rgba(240,130,108,0.28)" }}>{(n || "H").charAt(0).toUpperCase()}</div>;
+    return <div style={{ width: size, height: size, borderRadius: "50%", background: "linear-gradient(135deg,#f9c784,#f0826c)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: size * 0.38, fontWeight: 700, color: "white", boxShadow: "0 4px 16px rgba(240,130,108,0.28)" }}>{(n || "?").charAt(0).toUpperCase()}</div>;
   };
 
   if (page === "about") return (<div className="modal-bg" onClick={onClose}><div className="modal" style={{ background: T.surface, width: 420, maxHeight: "85vh", overflowY: "auto" }} onClick={e => e.stopPropagation()}>
@@ -424,7 +424,7 @@ function ProfileModal({ onClose, dark, onToggleDark, profile, onSaveProfile, onS
   return (<div className="modal-bg" onClick={onClose}><div className="modal" style={{ background: T.surface, width: 360 }} onClick={e => e.stopPropagation()}>
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 10, marginBottom: 18 }}>
       <AvatarPreview size={66} n={profile.name} type={profile.avatarType} emoji={profile.avatarEmoji} img={profile.avatarImg} />
-      <div style={{ textAlign: "center" }}><div style={{ fontFamily: "'Playfair Display',serif", fontSize: 17, color: T.text }}>{profile.name || "Harika"}</div><div style={{ fontSize: 12, color: T.muted }}>{profile.email || "harika@example.com"}</div></div>
+      <div style={{ textAlign: "center" }}><div style={{ fontFamily: "'Playfair Display',serif", fontSize: 17, color: T.text }}>{profile.name || "Your Name"}</div><div style={{ fontSize: 12, color: T.muted }}>{profile.email || "Edit profile to add email"}</div></div>
     </div>
     <div style={{ display: "flex", flexDirection: "column", gap: 7 }}>
       {[["✏️", "Edit Profile", () => setPage("edit")], ["ℹ️", "About InstaVault", () => setPage("about")], ["🔔", "Notifications", onClose], ["❓", "Help & Feedback", onClose]].map(([icon, label, action]) => (<button key={label} onClick={action} style={{ display: "flex", alignItems: "center", gap: 11, padding: "9px 12px", borderRadius: 10, border: `1px solid ${T.border}`, background: T.input, cursor: "pointer", fontFamily: "'Nunito',sans-serif", fontSize: 13, color: T.text, textAlign: "left" }}><span style={{ fontSize: 16 }}>{icon}</span>{label}</button>))}
@@ -767,7 +767,7 @@ function DashboardPage({ categories, items, onSelectBoard, onNewBoard, dark, sea
         </div>
         <div style={{ fontSize: 9.5, fontWeight: 700, letterSpacing: "0.11em", textTransform: "uppercase", color: accentColor, marginBottom: 4, opacity: 0.85, position: "relative" }}>{timeGreet}</div>
         <div style={{ fontFamily: "'Playfair Display',serif", fontSize: 26, fontWeight: 600, color: T.text, lineHeight: 1.2, marginBottom: 6, position: "relative" }}>
-          Welcome back, <em style={{ fontStyle: "italic", color: accentColor }}>{profile?.name || "Harika"}</em> {greetEmoji}
+          Welcome back, <em style={{ fontStyle: "italic", color: accentColor }}>{profile?.name || "there"}</em> {greetEmoji}
         </div>
         <div style={{ width: 36, height: 2, background: `linear-gradient(90deg,${accentColor}88,transparent)`, borderRadius: 99, marginBottom: 8, position: "relative" }} />
         <div style={{ fontSize: 12.5, color: T.muted, lineHeight: 1.65, position: "relative", maxWidth: 360 }}>
@@ -978,7 +978,7 @@ export default function App() {
   const [deletedItems, setDeletedItems] = useLocalStorage("iv_trash_items", []);
   const [deletedBoards, setDeletedBoards] = useLocalStorage("iv_trash_boards", []);
   const [dark, setDark] = useLocalStorage("iv_dark", false);
-  const [profile, setProfile] = useLocalStorage("iv_profile", { name: "Harika", email: "harika@example.com", avatarType: "letter" });
+  const [profile, setProfile] = useLocalStorage("iv_profile", { name: "", email: "", avatarType: "letter" });
   const [journal, setJournal] = useLocalStorage("iv_journal", {});
   const [showOnboarding, setShowOnboarding] = useLocalStorage("iv_onboarded", true);
   const [view, setView] = useState("dashboard");
@@ -1121,7 +1121,7 @@ export default function App() {
   const ProfileAvatar = ({ size = 28 }) => {
     if (profile.avatarType === "image" && profile.avatarImg) return <img src={profile.avatarImg} alt="" style={{ width: size, height: size, borderRadius: "50%", objectFit: "cover", flexShrink: 0, cursor: "pointer" }} />;
     if (profile.avatarType === "emoji") return <div style={{ width: size, height: size, borderRadius: "50%", background: "linear-gradient(135deg,#fef2f5,#fde4ea)", border: "1.5px solid rgba(220,140,160,0.2)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: size * 0.44, flexShrink: 0, cursor: "pointer" }}>{profile.avatarEmoji || "🌸"}</div>;
-    return <div style={{ width: size, height: size, borderRadius: "50%", background: "linear-gradient(135deg,#f9c784,#f0826c)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: size * 0.38, fontWeight: 700, color: "white", flexShrink: 0, cursor: "pointer", boxShadow: "0 2px 7px rgba(240,130,108,0.25)" }}>{(profile.name || "H").charAt(0).toUpperCase()}</div>;
+    return <div style={{ width: size, height: size, borderRadius: "50%", background: "linear-gradient(135deg,#f9c784,#f0826c)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: size * 0.38, fontWeight: 700, color: "white", flexShrink: 0, cursor: "pointer", boxShadow: "0 2px 7px rgba(240,130,108,0.25)" }}>{(profile.name || "?").charAt(0).toUpperCase()}</div>;
   };
 
   const SidebarRow = ({ cat, locked }) => {
@@ -1596,7 +1596,7 @@ export default function App() {
                             <div style={{ padding: "12px 16px", fontSize: 11, fontWeight: 700, color: T.muted, letterSpacing: "0.07em", textTransform: "uppercase", borderBottom: `1px solid ${T.border}` }}>Account</div>
                             <button onClick={() => setShowProfile(true)} style={{ width: "100%", display: "flex", alignItems: "center", gap: 12, padding: "13px 16px", background: "transparent", border: "none", cursor: "pointer", fontFamily: "'Nunito',sans-serif", fontSize: 13, color: T.text, textAlign: "left" }}>
                               <div style={{ width: 34, height: 34, borderRadius: 10, background: "linear-gradient(135deg,#fde4ea,#f8b0c4)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" /><circle cx="12" cy="7" r="4" /></svg></div>
-                              <div style={{ flex: 1 }}><div style={{ fontWeight: 700 }}>Edit Profile</div><div style={{ fontSize: 11, color: T.muted, marginTop: 1 }}>{profile.name || "Harika"} · {profile.email || ""}</div></div>
+                              <div style={{ flex: 1 }}><div style={{ fontWeight: 700 }}>Edit Profile</div><div style={{ fontSize: 11, color: T.muted, marginTop: 1 }}>{profile.name || "Set your name"} · {profile.email || ""}</div></div>
                               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={T.muted} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6" /></svg>
                             </button>
                           </div>
