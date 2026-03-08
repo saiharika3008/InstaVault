@@ -1,0 +1,47 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --bg: #0e0e10;
+  --surface: #18181b;
+  --surface2: #222226;
+  --border: #2e2e35;
+  --accent: #e8b86d;
+  --accent2: #c084fc;
+  --text: #f4f4f5;
+  --text-muted: #71717a;
+  --danger: #f87171;
+  --radius: 10px;
+  --font-display: 'DM Serif Display', serif;
+  --font-body: 'DM Sans', sans-serif;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+button {
+  cursor: pointer;
+  font-family: var(--font-body);
+  border: none;
+  outline: none;
+  transition: all 0.15s ease;
+}
+
+input, select {
+  font-family: var(--font-body);
+  outline: none;
+  transition: border-color 0.15s ease;
+}
+
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 99px; }
