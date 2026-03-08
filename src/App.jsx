@@ -89,6 +89,7 @@ function NavIcon({ type, color, size = 20 }) {
   const s = { stroke: color, fill: "none", strokeWidth: "1.9", strokeLinecap: "round", strokeLinejoin: "round" };
   const p = { ...s, width: size, height: size, viewBox: "0 0 24 24" };
   if (type === "home") return <svg {...p}><path d="M3 10.5L12 3l9 7.5V20a1 1 0 01-1 1H5a1 1 0 01-1-1v-9.5z" /><path d="M9 21V13h6v8" /></svg>;
+  if (type === "vault") return <svg {...p}><rect x="2" y="7" width="20" height="14" rx="2" /><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2" /><circle cx="12" cy="14" r="2" /></svg>;
   if (type === "boards") return <svg {...p}><rect x="3" y="3" width="8" height="8" rx="2" /><rect x="13" y="3" width="8" height="8" rx="2" /><rect x="3" y="13" width="8" height="8" rx="2" /><rect x="13" y="13" width="8" height="8" rx="2" /></svg>;
   if (type === "saved") return <svg {...p}><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z" /></svg>;
   if (type === "tags") return <svg {...p}><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z" /><circle cx="7" cy="7" r="1.5" fill={color} stroke="none" /></svg>;
@@ -549,7 +550,7 @@ function BoardModal({ initial, onSave, onClose, existingNames, vaultPin }) {
       <input className="modal-input" autoFocus placeholder="Board name" value={name} onChange={e => { setName(e.target.value); setNameErr(""); }} />
       {nameErr && <div style={{ fontSize: 12, color: "#e63946", marginTop: -6, marginBottom: 9, fontWeight: 600 }}>⚠️ {nameErr}</div>}
       <div style={{ marginBottom: 13 }}>
-        <div style={{ fontSize: 12, fontWeight: 700, color: "#8a7060", marginBottom: 7 }}>🖼 Custom cover <span style={{ fontWeight: 400, color: "#c4a888" }}>(optional — auto uses last saved post)</span></div>
+        <div style={{ fontSize: 12, fontWeight: 700, color: "#8a7060", marginBottom: 7 }}>🖼 Custom cover <span style={{ fontWeight: 400, color: "#c4a888" }}></span></div>
         {coverImg ? (<div style={{ position: "relative", borderRadius: 9, overflow: "hidden", height: 75, marginBottom: 5 }}>
           <img src={coverImg} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
           <button type="button" onClick={() => setCoverImg(null)} style={{ position: "absolute", top: 5, right: 5, width: 20, height: 20, borderRadius: 99, background: "rgba(0,0,0,0.5)", border: "none", color: "white", cursor: "pointer", fontSize: 12, display: "flex", alignItems: "center", justifyContent: "center" }}>×</button>
@@ -584,7 +585,7 @@ function JournalModal({ board, journal, onSave, onClose, dark }) {
     <div style={{ display: "flex", alignItems: "center", gap: 9, marginBottom: 12 }}>
       <span style={{ fontSize: 19 }}>📓</span>
       <div style={{ fontFamily: "'Playfair Display',serif", fontSize: 18, color: T.text, flex: 1 }}>{board.name}</div>
-      <button onClick={() => { setSelMode(p => !p); setSelIds([]); }} style={{ padding: "3px 10px", borderRadius: 7, border: `1.5px solid ${selMode ? "#c04060" : T.border}`, background: selMode ? "rgba(192,64,96,0.08)" : "transparent", color: selMode ? "#c04060" : T.muted, fontSize: 11, fontWeight: 700, cursor: "pointer", fontFamily: "'Nunito',sans-serif" }}>{selMode ? "✓ Selecting" : "Select"}</button>
+      <button onClick={() => { setSelMode(p => !p); setSelIds([]); }} style={{ padding: "3px 10px", borderRadius: 7, border: `1.5px solid ${selMode ? "#c04060" : T.border}`, background: selMode ? "rgba(192,64,96,0.08)" : "transparent", color: selMode ? "#c04060" : T.muted, fontSize: 11, fontWeight: 700, cursor: "pointer", fontFamily: "'Nunito',sans-serif" }}>{selMode ? "✓ Selected" : "Select"}</button>
       <button onClick={onClose} style={{ background: "none", border: "none", cursor: "pointer", fontSize: 19, color: T.muted, lineHeight: 1, marginLeft: 4 }}>×</button>
     </div>
     {selMode && selIds.length > 0 && (<div style={{ display: "flex", gap: 7, alignItems: "center", background: T.input, border: `1.5px solid ${T.border}`, borderRadius: 9, padding: "6px 10px", marginBottom: 10 }}>
@@ -932,7 +933,7 @@ function Homepage({ categories, items, onSelectBoard, onNewBoard, dark, searchQu
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
           <span style={{ fontSize: 13.5, fontWeight: 500, color: T.muted }}>{totalPosts} saved post{totalPosts !== 1 ? "s" : ""} · {totalBoards} board{totalBoards !== 1 ? "s" : ""}</span>
-          <button onClick={() => { if (bulkMode) { onBulkMode(false); } else { onBulkMode(true); } }} style={{ padding: "4px 12px", borderRadius: 8, border: `1.5px solid ${bulkMode ? "#c04060" : T.border}`, background: bulkMode ? "rgba(192,64,96,0.08)" : "transparent", color: bulkMode ? "#c04060" : T.muted, fontSize: 12, fontWeight: 700, cursor: "pointer", fontFamily: "'Nunito',sans-serif" }}>{bulkMode ? "✓ Selecting" : "Select"}</button>
+          <button onClick={() => { if (bulkMode) { onBulkMode(false); } else { onBulkMode(true); } }} style={{ padding: "4px 12px", borderRadius: 8, border: `1.5px solid ${bulkMode ? "#c04060" : T.border}`, background: bulkMode ? "rgba(192,64,96,0.08)" : "transparent", color: bulkMode ? "#c04060" : T.muted, fontSize: 12, fontWeight: 700, cursor: "pointer", fontFamily: "'Nunito',sans-serif" }}>{bulkMode ? "✓ Selected" : "Select"}</button>
           {!searchQuery.trim() && <select value={vaultSort} onChange={e => onVaultSort(e.target.value)} style={{ marginLeft: "auto", padding: "4px 10px", borderRadius: 8, border: `1.5px solid ${T.border}`, background: T.surface, color: T.text, fontSize: 12, fontWeight: 600, cursor: "pointer", fontFamily: "'Nunito',sans-serif", outline: "none" }}>
             <option value="shuffle">Default</option>
             <option value="newest">Latest first</option>
@@ -1332,9 +1333,9 @@ export default function App() {
 
         {/* Nav items */}
         <div className="sb-nav">
-          {/* Top nav */}
           {[
-            { key: "home", type: "home", label: "Home" },
+            { key: "dashboard", type: "home", label: "Home" },
+            { key: "home", type: "vault", label: "My Vault" },
             { key: "myboards", type: "boards", label: "My Boards" },
             { key: "tags", type: "tags", label: "Tags" },
             { key: "journal", type: "journal", label: "Journal" },
@@ -1349,38 +1350,33 @@ export default function App() {
             </div>
           ))}
 
-          {/* Locked boards — single PIN-protected row */}
-          {lockedBoards.length > 0 && (<>
-            <div className="sb-boards-label" style={{ marginTop: 4 }}>Locked</div>
-            <div className={`sb-nav-item${view === "locked" ? " sb-nav-active" : ""}`}
-              onClick={() => {
-                if (vaultUnlocked) {
-                  setVaultUnlocked(false);
-                  const inLockedBoard = lockedBoards.some(c => c.id === view);
-                  if (view === "locked" || inLockedBoard) setView("dashboard");
-                } else if (!vaultPin) {
-                  // No vault PIN set yet — go straight to locked page to set one
-                  setView("locked");
-                } else {
-                  setPinModal({ vaultMode: true }); setPinError("");
-                }
-              }}
-            >
-              <div className="sb-nav-icon">
-                {vaultUnlocked
-                  ? <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#84c9a8" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
-                    <rect x="3" y="11" width="18" height="11" rx="2" /><path d="M7 11V7a5 5 0 0114 0" />
-                  </svg>
-                  : <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={T.muted} strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
-                    <rect x="3" y="11" width="18" height="11" rx="2" /><path d="M7 11V7a5 5 0 0110 0v4" />
-                  </svg>
-                }
-              </div>
-              <span className="sb-nav-label" style={{ color: vaultUnlocked ? "#84c9a8" : T.text }}>{vaultUnlocked ? "Lock Boards" : "Locked Boards"}</span>
-              <span style={{ marginLeft: "auto", fontSize: 9, fontWeight: 700, background: "rgba(192,64,96,0.1)", color: "#c04060", padding: "1px 5px", borderRadius: 99, flexShrink: 0, opacity: sbExpanded ? 1 : 0, transition: "opacity 0.12s" }}>{lockedBoards.length}</span>
+          {/* Locked boards — always visible */}
+          <div className={`sb-nav-item${view === "locked" ? " sb-nav-active" : ""}`}
+            onClick={() => {
+              if (vaultUnlocked) {
+                setVaultUnlocked(false);
+                const inLockedBoard = lockedBoards.some(c => c.id === view);
+                if (view === "locked" || inLockedBoard) setView("dashboard");
+              } else if (!vaultPin) {
+                setView("locked");
+              } else {
+                setPinModal({ vaultMode: true }); setPinError("");
+              }
+            }}
+          >
+            <div className="sb-nav-icon">
+              {vaultUnlocked
+                ? <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#84c9a8" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="3" y="11" width="18" height="11" rx="2" /><path d="M7 11V7a5 5 0 0114 0" />
+                </svg>
+                : <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={view === "locked" ? "#c04060" : T.muted} strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="3" y="11" width="18" height="11" rx="2" /><path d="M7 11V7a5 5 0 0110 0v4" />
+                </svg>
+              }
             </div>
-
-          </>)}
+            <span className="sb-nav-label" style={{ color: vaultUnlocked ? "#84c9a8" : (view === "locked" ? "#c04060" : T.text) }}>{vaultUnlocked ? "Lock Boards" : "Locked Boards"}</span>
+            {lockedBoards.length > 0 && <span style={{ marginLeft: "auto", fontSize: 9, fontWeight: 700, background: "rgba(192,64,96,0.1)", color: "#c04060", padding: "1px 5px", borderRadius: 99, flexShrink: 0, opacity: sbExpanded ? 1 : 0, transition: "opacity 0.12s" }}>{lockedBoards.length}</span>}
+          </div>
         </div>
 
         {/* Bottom section */}
@@ -1447,7 +1443,7 @@ export default function App() {
               <div style={{ marginLeft: "auto", display: "flex", gap: 6, alignItems: "center" }}>
                 <button onClick={() => { setChangePinModal({ mode: 'change' }); }} style={{ fontSize: 11, fontWeight: 700, color: "#c04060", background: "rgba(192,64,96,0.08)", border: "1.5px solid rgba(192,64,96,0.2)", borderRadius: 8, padding: "4px 12px", cursor: "pointer", fontFamily: "'Nunito',sans-serif" }}>🔑 {vaultPin ? "Change PIN" : "Set PIN"}</button>
                 {vaultPin && <button onClick={() => { setChangePinModal({ mode: 'remove' }); }} style={{ fontSize: 11, fontWeight: 700, color: "#e63946", background: "rgba(230,57,70,0.06)", border: "1.5px solid rgba(230,57,70,0.2)", borderRadius: 8, padding: "4px 12px", cursor: "pointer", fontFamily: "'Nunito',sans-serif" }}>🗑 Remove PIN</button>}
-                <button onClick={() => { setBoardSelectMode(p => !p); setSelectedBoards([]); }} style={{ fontSize: 11, fontWeight: 700, color: boardSelectMode ? "#c04060" : T.muted, background: boardSelectMode ? "rgba(192,64,96,0.08)" : "transparent", border: `1.5px solid ${boardSelectMode ? "#c04060" : T.border}`, borderRadius: 8, padding: "4px 12px", cursor: "pointer", fontFamily: "'Nunito',sans-serif" }}>{boardSelectMode ? "✓ Selecting" : "Select"}</button>
+                <button onClick={() => { setBoardSelectMode(p => !p); setSelectedBoards([]); }} style={{ fontSize: 11, fontWeight: 700, color: boardSelectMode ? "#c04060" : T.muted, background: boardSelectMode ? "rgba(192,64,96,0.08)" : "transparent", border: `1.5px solid ${boardSelectMode ? "#c04060" : T.border}`, borderRadius: 8, padding: "4px 12px", cursor: "pointer", fontFamily: "'Nunito',sans-serif" }}>{boardSelectMode ? "✓ Selected" : "Select"}</button>
 
               </div>
             </div>
@@ -1485,7 +1481,7 @@ export default function App() {
               <div style={{ display: "flex", alignItems: "center", marginBottom: 4 }}>
                 <div style={{ fontFamily: "'Playfair Display',serif", fontSize: 24, fontWeight: 600, color: T.text, flex: 1 }}>My Boards</div>
                 <button onClick={() => { setBoardSelectMode(p => !p); setSelectedBoards([]); }} style={{ padding: "5px 13px", borderRadius: 8, border: `1.5px solid ${boardSelectMode ? "#c04060" : T.border}`, background: boardSelectMode ? "rgba(192,64,96,0.08)" : "transparent", color: boardSelectMode ? "#c04060" : T.muted, fontSize: 12, fontWeight: 700, cursor: "pointer", fontFamily: "'Nunito',sans-serif" }}>
-                  {boardSelectMode ? "✓ Selecting" : "Select"}
+                  {boardSelectMode ? "✓ Selected" : "Select"}
                 </button>
               </div>
               {boardSelectMode && selectedBoards.length > 0 && (
@@ -1552,7 +1548,7 @@ export default function App() {
                   return (<div style={{ padding: "26px 28px 16px", height: "100%", overflowY: "auto" }}>
                     <div style={{ display: "flex", alignItems: "center", marginBottom: 4 }}>
                       <div style={{ fontFamily: "'Playfair Display',serif", fontSize: 24, fontWeight: 600, color: T.text, flex: 1 }}>Recently Saved</div>
-                      <button onClick={() => { setBulkMode(v => { if (v) setSelectedPosts([]); return !v; }); }} style={{ padding: "5px 13px", borderRadius: 8, border: `1.5px solid ${bulkMode ? "#c04060" : T.border}`, background: bulkMode ? "rgba(192,64,96,0.08)" : "transparent", color: bulkMode ? "#c04060" : T.muted, fontSize: 12, fontWeight: 700, cursor: "pointer", fontFamily: "'Nunito',sans-serif" }}>{bulkMode ? "✓ Selecting" : "Select"}</button>
+                      <button onClick={() => { setBulkMode(v => { if (v) setSelectedPosts([]); return !v; }); }} style={{ padding: "5px 13px", borderRadius: 8, border: `1.5px solid ${bulkMode ? "#c04060" : T.border}`, background: bulkMode ? "rgba(192,64,96,0.08)" : "transparent", color: bulkMode ? "#c04060" : T.muted, fontSize: 12, fontWeight: 700, cursor: "pointer", fontFamily: "'Nunito',sans-serif" }}>{bulkMode ? "✓ Selected" : "Select"}</button>
                     </div>
                     {bulkMode && selectedPosts.length > 0 && (<div style={{ display: "flex", gap: 7, alignItems: "center", background: T.surface, border: `1.5px solid ${T.border}`, borderRadius: 9, padding: "7px 12px", marginBottom: 10 }}><span style={{ fontSize: 12, fontWeight: 700, color: T.text }}>{selectedPosts.length} selected</span><button onClick={() => { selectedPosts.forEach(id => requestDeleteItem(id)); setSelectedPosts([]); setBulkMode(false); }} style={{ padding: "4px 10px", borderRadius: 7, border: "1px solid #f5c5d8", background: "#fff0f5", color: "#e63946", fontSize: 11, fontWeight: 700, cursor: "pointer", fontFamily: "'Nunito',sans-serif" }}>Delete</button><button onClick={() => setMovePost({ bulk: true })} style={{ padding: "4px 10px", borderRadius: 7, border: `1px solid ${T.border}`, background: T.input, color: T.muted, fontSize: 11, fontWeight: 700, cursor: "pointer", fontFamily: "'Nunito',sans-serif" }}>Move</button><button onClick={() => { setSelectedPosts([]); setBulkMode(false); }} style={{ marginLeft: "auto", background: "none", border: "none", cursor: "pointer", fontSize: 13, color: T.muted, padding: 0 }}>Cancel</button></div>)}
                     <div style={{ fontSize: 13, color: T.muted, fontWeight: 500, marginBottom: 20 }}>{savedPosts.length} posts · newest first</div>
@@ -1583,7 +1579,7 @@ export default function App() {
                           </button>
                           <span style={{ display: "inline-flex", alignItems: "center", padding: "6px 16px", borderRadius: 99, background: bg.bg, border: `1.5px solid ${bg.border}`, fontSize: 14, fontWeight: 700, color: bg.text }}>#{activeTagView}</span>
                           <span style={{ fontSize: 13, color: T.muted }}>{taggedPosts.length} post{taggedPosts.length !== 1 ? "s" : ""}</span>
-                          <button onClick={() => { setBulkMode(v => { if (v) setSelectedPosts([]); return !v; }); }} style={{ marginLeft: "auto", padding: "5px 13px", borderRadius: 8, border: `1.5px solid ${bulkMode ? "#c04060" : T.border}`, background: bulkMode ? "rgba(192,64,96,0.08)" : "transparent", color: bulkMode ? "#c04060" : T.muted, fontSize: 12, fontWeight: 700, cursor: "pointer", fontFamily: "'Nunito',sans-serif" }}>{bulkMode ? "✓ Selecting" : "Select"}</button>
+                          <button onClick={() => { setBulkMode(v => { if (v) setSelectedPosts([]); return !v; }); }} style={{ marginLeft: "auto", padding: "5px 13px", borderRadius: 8, border: `1.5px solid ${bulkMode ? "#c04060" : T.border}`, background: bulkMode ? "rgba(192,64,96,0.08)" : "transparent", color: bulkMode ? "#c04060" : T.muted, fontSize: 12, fontWeight: 700, cursor: "pointer", fontFamily: "'Nunito',sans-serif" }}>{bulkMode ? "✓ Selected" : "Select"}</button>
                         </div>
                         {bulkMode && selectedPosts.length > 0 && (<div style={{ display: "flex", gap: 7, alignItems: "center", background: T.surface, border: `1.5px solid ${T.border}`, borderRadius: 9, padding: "7px 12px", marginBottom: 10 }}><span style={{ fontSize: 12, fontWeight: 700, color: T.text }}>{selectedPosts.length} selected</span><button onClick={() => { selectedPosts.forEach(id => requestDeleteItem(id)); setSelectedPosts([]); setBulkMode(false); }} style={{ padding: "4px 10px", borderRadius: 7, border: "1px solid #f5c5d8", background: "#fff0f5", color: "#e63946", fontSize: 11, fontWeight: 700, cursor: "pointer", fontFamily: "'Nunito',sans-serif" }}>Delete</button><button onClick={() => setMovePost({ bulk: true })} style={{ padding: "4px 10px", borderRadius: 7, border: `1px solid ${T.border}`, background: T.input, color: T.muted, fontSize: 11, fontWeight: 700, cursor: "pointer", fontFamily: "'Nunito',sans-serif" }}>Move</button><button onClick={() => { setSelectedPosts([]); setBulkMode(false); }} style={{ marginLeft: "auto", background: "none", border: "none", cursor: "pointer", fontSize: 13, color: T.muted, padding: 0 }}>Cancel</button></div>)}
                         {taggedPosts.length === 0 ? (
@@ -1611,7 +1607,7 @@ export default function App() {
                         return (<div style={{ padding: "26px 28px 16px", height: "100%", overflowY: "auto" }}>
                           <div style={{ display: "flex", alignItems: "center", marginBottom: 4, gap: 8 }}>
                             <div style={{ fontFamily: "'Playfair Display',serif", fontSize: 24, fontWeight: 600, color: T.text, flex: 1 }}>Tags</div>
-                            <button onClick={() => { setTagSelectMode(p => !p); setSelectedTags([]); }} style={{ padding: "4px 12px", borderRadius: 8, border: `1.5px solid ${tagSelectMode ? "#c04060" : T.border}`, background: tagSelectMode ? "rgba(192,64,96,0.08)" : "transparent", color: tagSelectMode ? "#c04060" : T.muted, fontSize: 12, fontWeight: 700, cursor: "pointer", fontFamily: "'Nunito',sans-serif" }}>{tagSelectMode ? "✓ Selecting" : "Select"}</button>
+                            <button onClick={() => { setTagSelectMode(p => !p); setSelectedTags([]); }} style={{ padding: "4px 12px", borderRadius: 8, border: `1.5px solid ${tagSelectMode ? "#c04060" : T.border}`, background: tagSelectMode ? "rgba(192,64,96,0.08)" : "transparent", color: tagSelectMode ? "#c04060" : T.muted, fontSize: 12, fontWeight: 700, cursor: "pointer", fontFamily: "'Nunito',sans-serif" }}>{tagSelectMode ? "✓ Selected" : "Select"}</button>
                           </div>
                           <div style={{ fontSize: 13, color: T.muted, fontWeight: 500, marginBottom: tagSelectMode && selectedTags.length > 0 ? 10 : 20 }}>{[...new Set(items.flatMap(i => i.tags || []))].length} unique tags</div>
                           {tagSelectMode && selectedTags.length > 0 && (<div style={{ display: "flex", gap: 7, alignItems: "center", background: T.surface, border: `1.5px solid ${T.border}`, borderRadius: 9, padding: "7px 12px", marginBottom: 14 }}>
@@ -1715,7 +1711,7 @@ export default function App() {
                                 <option value="hasNotes">Has Notes</option>
                                 <option value="alpha">A–Z</option>
                               </select>
-                              <button onClick={() => { setBoardSelectMode(p => !p); setSelectedBoards([]); }} style={{ padding: "4px 12px", borderRadius: 7, border: `1.5px solid ${boardSelectMode ? "#c04060" : T.border}`, background: boardSelectMode ? "rgba(192,64,96,0.08)" : "transparent", color: boardSelectMode ? "#c04060" : T.muted, fontSize: 11, fontWeight: 700, cursor: "pointer", fontFamily: "'Nunito',sans-serif" }}>{boardSelectMode ? "✓ Selecting" : "Select"}</button>
+                              <button onClick={() => { setBoardSelectMode(p => !p); setSelectedBoards([]); }} style={{ padding: "4px 12px", borderRadius: 7, border: `1.5px solid ${boardSelectMode ? "#c04060" : T.border}`, background: boardSelectMode ? "rgba(192,64,96,0.08)" : "transparent", color: boardSelectMode ? "#c04060" : T.muted, fontSize: 11, fontWeight: 700, cursor: "pointer", fontFamily: "'Nunito',sans-serif" }}>{boardSelectMode ? "✓ Selected" : "Select"}</button>
                             </div>
                           </div>
                           <div style={{ fontSize: 13, color: T.muted, fontWeight: 500, marginBottom: 20 }}>Notes and thoughts for each board</div>
@@ -1802,7 +1798,7 @@ export default function App() {
                                 <button onClick={() => { setBulkMode(v => { if (v) setSelectedPosts([]); return !v; }); }}
                                   style={{ display: "flex", alignItems: "center", gap: 6, padding: "7px 13px", borderRadius: 9, border: `1.5px solid ${bulkMode ? "#c04060" : T.border}`, background: bulkMode ? "rgba(192,64,96,0.1)" : T.surface, color: bulkMode ? "#c04060" : T.text, fontSize: 12.5, fontWeight: 600, cursor: "pointer", fontFamily: "'Nunito',sans-serif", boxShadow: "0 1px 4px rgba(180,80,110,0.06)", whiteSpace: "nowrap" }}>
                                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">{bulkMode ? <polyline points="20 6 9 17 4 12" /> : <><rect x="3" y="3" width="5" height="5" rx="1" /><rect x="10" y="3" width="5" height="5" rx="1" /><rect x="17" y="3" width="4" height="5" rx="1" /><rect x="3" y="10" width="5" height="5" rx="1" /></>}</svg>
-                                  {bulkMode ? "✓ Selecting" : "Select"}
+                                  {bulkMode ? "✓ Selected" : "Select"}
                                 </button>
                               </div>
                             </div>
