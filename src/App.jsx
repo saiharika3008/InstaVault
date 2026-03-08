@@ -767,7 +767,7 @@ function DashboardPage({ categories, items, onSelectBoard, onNewBoard, dark, sea
         </div>
         <div style={{ fontSize: 9.5, fontWeight: 700, letterSpacing: "0.11em", textTransform: "uppercase", color: accentColor, marginBottom: 4, opacity: 0.85, position: "relative" }}>{timeGreet}</div>
         <div style={{ fontFamily: "'Playfair Display',serif", fontSize: 26, fontWeight: 600, color: T.text, lineHeight: 1.2, marginBottom: 6, position: "relative" }}>
-          Welcome back, <em style={{ fontStyle: "italic", color: accentColor }}>{profile?.name || "there"}</em> {greetEmoji}
+          {profile?.name ? <>Welcome back, <em style={{ fontStyle: "italic", color: accentColor }}>{profile.name}</em></> : <>Welcome to <em style={{ fontStyle: "italic", color: accentColor }}>InstaVault</em></>} {greetEmoji}
         </div>
         <div style={{ width: 36, height: 2, background: `linear-gradient(90deg,${accentColor}88,transparent)`, borderRadius: 99, marginBottom: 8, position: "relative" }} />
         <div style={{ fontSize: 12.5, color: T.muted, lineHeight: 1.65, position: "relative", maxWidth: 360 }}>
