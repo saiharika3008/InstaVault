@@ -1,58 +1,58 @@
-# InstaVault – Instagram Content Organizer
+# InstaVault 
 
-## Setup & Run
+**A personal content organiser to save and categorise your favourite posts from Instagram, YouTube, Pinterest, TikTok, and more — all in one place.**
 
-```bash
-# 1. Install dependencies
-npm install
+>  **Status: Frontend prototype** — core UI is functional; backend and user authentication are not yet implemented.
 
-# 2. Start development server
-npm run dev
-```
+🔗 **Live Demo → [myinstavault.netlify.app](https://myinstavault.netlify.app)**
 
-Then open http://localhost:5173 in your browser.
+>  To run locally: clone the repo, run `npm install` then `npm run dev`.
 
-## Deploy to Vercel (free)
+---
 
-```bash
-npm install -g vercel
-vercel
-```
+![Landing Page](screenshots/landing.png)
 
-## Deploy to Netlify (free)
+---
 
-```bash
-npm run build
-# Upload the /dist folder to netlify.com
-```
+##  Features
 
-## Project Structure
+-  **Dashboard** — See your stats (boards, posts saved, tags used, activity this week) and recently saved posts at a glance
+-  **Boards** — Create custom boards to organise content by theme, mood, or topic
+-  **Save Posts** — Add links from Instagram, YouTube, Pinterest, TikTok and more; platform is auto-detected and badged
+-  **Tags** — Label posts with custom hashtags and filter by them
+-  **Journal** — Write notes attached to each board
+-  **Locked Boards** — PIN-protect boards for private content
+-  **Recently Deleted** — Recover accidentally removed posts
+-  **Persistent Storage** — Everything saves automatically via `localStorage`; survives page reloads
+-  **Responsive Layout** — Works on desktop and mobile; sidebar collapses to a top panel on smaller screens 
+-  **Export saved data as JSON**
 
-```
-instavault/
-├── index.html
-├── package.json
-├── vite.config.js
-└── src/
-    ├── main.jsx
-    ├── App.jsx
-    ├── App.module.css
-    ├── index.css
-    └── components/
-        ├── Header.jsx
-        ├── Header.module.css
-        ├── CategoryList.jsx
-        ├── CategoryList.module.css
-        ├── ItemList.jsx
-        ├── ItemList.module.css
-        ├── AddCategoryForm.jsx
-        ├── AddCategoryForm.module.css
-        ├── AddItemForm.jsx
-        └── AddItemForm.module.css
-```
+---
 
-## Features
-- Add / Delete categories
-- Add / Delete Instagram posts (links or text) per category
-- Data persists across page reloads via localStorage
-- Responsive layout (sidebar on mobile becomes top panel)
+##  Screenshots
+
+### Dashboard
+![Dashboard](screenshots/dashboard.png)
+
+### Vault — Saved Posts View
+![Vault](screenshots/vault.png)
+
+---
+
+##  Tech Stack
+
+| Layer      | Technology             |
+|------------|------------------------|
+| UI         | React 18               |
+| Bundler    | Vite                   |
+| Styling    | CSS Modules            |
+| Storage    | Browser `localStorage` |
+| Deployment | Netlify                |
+
+---
+
+##  Planned Features
+
+- [ ] User authentication and account system
+- [ ] Backend integration for cloud sync across devices
+- [ ] API connections to fetch post previews automatically
