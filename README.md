@@ -10,7 +10,7 @@
 
 ---
 
-![Landing Page](screenshots/landing.png)
+![Landing Page](https://github.com/saiharika3008/InstaVault/blob/master/src/Screenshots%20-%20instavault/landing.png)
 
 ---
 
@@ -32,10 +32,10 @@
 ##  Screenshots
 
 ### Dashboard
-![Dashboard](screenshots/dashboard.png)
+![Dashboard](https://github.com/saiharika3008/InstaVault/blob/master/src/Screenshots%20-%20instavault/dashboard.png)
 
 ### Vault — Saved Posts View
-![Vault](screenshots/vault.png)
+![Vault](https://github.com/saiharika3008/InstaVault/blob/master/src/Screenshots%20-%20instavault/vault.png)
 
 ---
 
